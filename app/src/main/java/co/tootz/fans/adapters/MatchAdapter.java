@@ -1,0 +1,101 @@
+package co.tootz.fans.adapters;
+
+
+import android.content.Context;
+import android.content.Intent;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import co.tootz.fans.R;
+import co.tootz.fans.activities.MatchDetailActivity;
+import co.tootz.fans.domain.Match;
+
+public class MatchAdapter extends ArrayAdapter<Match> {
+    private Context context;
+
+    public MatchAdapter(Context context, int id) {
+        super(context, id);
+        this.context = context;
+        this.update();
+    }
+
+    public void update() {
+        this.clear();
+
+        List<Match> matchesList = new ArrayList<>();
+        matchesList.add(new Match("1", "Brasil", "1", "", "", "Alemanha", "7", "", ""));
+        matchesList.add(new Match("2", "Croácia", "4", "", "", "Japão", "3", "", ""));
+        matchesList.add(new Match("3", "Brasil", "1", "", "", "Alemanha", "7", "", ""));
+        matchesList.add(new Match("4", "Croácia", "4", "", "", "Japão", "3", "", ""));
+        matchesList.add(new Match("5", "Brasil", "1", "", "", "Alemanha", "7", "", ""));
+        matchesList.add(new Match("6", "Croácia", "4", "", "", "Japão", "3", "", ""));
+        matchesList.add(new Match("7", "Brasil", "1", "", "", "Alemanha", "7", "", ""));
+        matchesList.add(new Match("8", "Croácia", "4", "", "", "Japão", "3", "", ""));
+
+        this.addAll(matchesList);
+        this.notifyDataSetChanged();
+    }
+
+    public View getView(int position, View view, ViewGroup parent) {
+        final Match match = getItem(position);
+        ViewHolder holder = null;
+
+        if (view == null) {
+            LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            view = inflater.inflate(R.layout.match_row, null);
+
+            holder = new ViewHolder();
+
+            holder.firstTeamName = (TextView) view.findViewById(R.id.matchRowFirstTeamName);
+            holder.firstTeamScore = (TextView) view.findViewById(R.id.matchRowFirstTeamScore);
+            holder.firstTeamFlag = (ImageView) view.findViewById(R.id.matchRowFirstTeamFlag);
+            holder.secondTeamName = (TextView) view.findViewById(R.id.matchRowSecondTeamName);
+            holder.secondTeamScore = (TextView) view.findViewById(R.id.matchRowSecondTeamScore);
+            holder.secondTeamFlag = (ImageView) view.findViewById(R.id.matchRowSecondTeamFlag);
+
+            view.setTag(holder);
+
+
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String match_id = match.getId();
+                    Intent intent = new Intent(context, MatchDetailActivity.class);
+
+                    intent.putExtra("match_id", match_id);
+
+                    context.startActivity(intent);
+                }
+            });
+        } else {
+            holder = (ViewHolder) view.getTag();
+        }
+
+        if (match != null) {
+            holder.firstTeamName.setText(match.getFirstTeamName());
+            holder.firstTeamScore.setText(match.getFirstTeamScore());
+//            holder.firstTeamFlag.setImageBitmap(match.getFirstTeamFlagImageBitmap());
+            holder.secondTeamName.setText(match.getSecondTeamName());
+            holder.secondTeamScore.setText(match.getSecondTeamScore());
+//            holder.firstTeamFlag.setImageBitmap(match.getFirstTeamFlagImageBitmap());
+        }
+
+        return view;
+    }
+
+    static class ViewHolder {
+        TextView firstTeamName;
+        TextView firstTeamScore;
+        ImageView firstTeamFlag;
+        TextView secondTeamName;
+        TextView secondTeamScore;
+        ImageView secondTeamFlag;
+    }
+}

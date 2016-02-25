@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fansRoomRow"
+    android:layout_gravity="fill_horizontal"
+    android:layout_height="wrap_content"
+    android:horizontalSpacing="5dp"
+    android:columnCount="4"
+    android:rowCount="1"
+    android:orientation="horizontal"
+    android:descendantFocusability="blocksDescendants"
+    android:layout_width="fill_parent"
+    android:background="#B3000000"
+    android:paddingTop="20dp"
+    android:paddingBottom="20dp">
+
+    <ImageView
+        android:layout_width="23dp"
+        android:layout_height="21dp"
+        android:id="@+id/fansRoomChatIcon"
+        android:layout_row="0"
+        android:layout_column="0"
+        android:cropToPadding="false"
+        android:scaleType="centerCrop"
+        android:src="@drawable/icon_chat"
+        android:layout_marginLeft="13dp"
+        android:layout_marginRight="12dp" />
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Fans Room 1"
+        android:id="@+id/fansRoomName"
+        android:layout_row="0"
+        android:layout_column="1"
+        android:textStyle="bold"
+        android:textColor="#fff"
+        android:paddingLeft="10dp"
+        android:paddingRight="20dp"
+        android:layout_columnWeight="1" />
+
+    <ImageView
+        android:layout_width="20dp"
+        android:layout_height="23dp"
+        android:id="@+id/fansRoomFanIcon"
+        android:layout_row="0"
+        android:layout_column="2"
+        android:cropToPadding="false"
+        android:scaleType="centerCrop"
+        android:src="@drawable/icon_user"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp" />
+
+    <TextView
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="0"
+        android:id="@+id/fansRoomNumberOfFans"
+        android:layout_row="0"
+        android:layout_column="3"
+        android:layout_gravity="center_vertical"
+        android:textStyle="bold"
+        android:textColor="#fff"
+        android:paddingLeft="10dp"
+        android:paddingRight="20dp" />
+
+
+
+
+</GridLayout>
