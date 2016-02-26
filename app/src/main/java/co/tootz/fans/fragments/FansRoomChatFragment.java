@@ -36,7 +36,7 @@ public class FansRoomChatFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.battle_cry_fragment, container, false);
+        View v = inflater.inflate(R.layout.chat_fragment, container, false);
 
 //        TextView tv = (TextView) v.findViewById(R.id.tvFragFirst);
 //        tv.setText(getArguments().getString("msg"));

@@ -28,6 +28,7 @@
         <activity
             android:name=".activities.MatchesActivity"
             android:screenOrientation="portrait"
+            android:label="FANS"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
