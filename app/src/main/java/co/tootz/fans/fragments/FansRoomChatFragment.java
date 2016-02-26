@@ -1,5 +1,6 @@
 package co.tootz.fans.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -33,6 +34,7 @@ public class FansRoomChatFragment extends Fragment {
     private Button mSendButton;
     private TextView mTextView;
     private TextView mNumberUsersTextView;
+    private Activity activity;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -62,7 +64,7 @@ public class FansRoomChatFragment extends Fragment {
     }
 
     private void setDisconnected(){
-        mSocket.connect();
+        if (activity != null) activity.finish();
     }
 
     private void setNumberUsers(JSONObject obj){
@@ -105,6 +107,7 @@ public class FansRoomChatFragment extends Fragment {
             mSocket.on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
                 @Override
                 public void call(Object... args) {
+                    Log.d("SOCKET", "DICONNECTED");
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -117,6 +120,7 @@ public class FansRoomChatFragment extends Fragment {
             mSocket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
                 @Override
                 public void call(Object... args){
+                    Log.d("SOCKET", "CONNECTED");
                     try {
                         JSONObject obj = new JSONObject();
                         obj.put("token", User.getTokeen(context));
@@ -131,6 +135,7 @@ public class FansRoomChatFragment extends Fragment {
             mSocket.on("authenticated", new Emitter.Listener(){
                 @Override
                 public void call(Object... args) {
+                    Log.d("SOCKET", "AUTHENTICATED");
                     mSocket.emit("add user", User.getUsername(context));
                 }
             });
@@ -138,8 +143,9 @@ public class FansRoomChatFragment extends Fragment {
             mSocket.on("login", new Emitter.Listener() {
                 @Override
                 public void call(Object... args) {
+                    Log.d("SOCKET", "LOGIN");
                     final JSONObject obj = (JSONObject) args[0];
-                    getActivity().runOnUiThread(new Runnable() {
+                    activity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             setNumberUsers(obj);
@@ -151,8 +157,9 @@ public class FansRoomChatFragment extends Fragment {
             mSocket.on("user joined", new Emitter.Listener() {
                 @Override
                 public void call(Object... args) {
+                    Log.d("SOCKET", "USER JOINED");
                     final JSONObject obj = (JSONObject) args[0];
-                    getActivity().runOnUiThread(new Runnable() {
+                    activity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             infoMessage(obj, true);
@@ -164,8 +171,9 @@ public class FansRoomChatFragment extends Fragment {
             mSocket.on("user left", new Emitter.Listener() {
                 @Override
                 public void call(Object... args) {
+                    Log.d("SOCKET", "USER LEFT");
                     final JSONObject obj = (JSONObject) args[0];
-                    getActivity().runOnUiThread(new Runnable() {
+                    activity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             infoMessage(obj, false);
@@ -177,8 +185,9 @@ public class FansRoomChatFragment extends Fragment {
             mSocket.on("new message", new Emitter.Listener() {
                 @Override
                 public void call(Object... args) {
+                    Log.d("SOCKET", "NEW MESSAGE");
                     final JSONObject obj = (JSONObject) args[0];
-                    getActivity().runOnUiThread(new Runnable() {
+                    activity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             userMessage(obj);
@@ -192,6 +201,7 @@ public class FansRoomChatFragment extends Fragment {
     }
 
     private void attemptSend() {
+        Log.d("SOCKET", "ATTEMPT SEND");
         final String message = mInputMessage.getText().toString().trim();
         if (TextUtils.isEmpty(message)) {
             return;
@@ -225,5 +235,14 @@ public class FansRoomChatFragment extends Fragment {
         f.setArguments(b);
 
         return f;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        if (context instanceof Activity){
+            this.activity = (Activity) context;
+        }
     }
 }
