@@ -38,6 +38,10 @@
         <activity
             android:name=".activities.MatchDetailActivity"
             android:label="@string/title_activity_match_detail"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.FansRoomActivity"
+            android:label="@string/title_activity_fans_room"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

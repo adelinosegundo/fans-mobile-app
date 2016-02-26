@@ -2,7 +2,7 @@
 <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/fansRoomRow"
     android:layout_gravity="fill_horizontal"
-    android:layout_height="wrap_content"
+    android:layout_height="60dp"
     android:horizontalSpacing="5dp"
     android:columnCount="4"
     android:rowCount="1"
@@ -37,7 +37,7 @@
         android:textColor="#fff"
         android:paddingLeft="10dp"
         android:paddingRight="20dp"
-        android:layout_columnWeight="1" />
+        android:layout_gravity="fill_horizontal" />
 
     <ImageView
         android:layout_width="20dp"
@@ -48,22 +48,22 @@
         android:cropToPadding="false"
         android:scaleType="centerCrop"
         android:src="@drawable/icon_user"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp" />
+        android:layout_marginRight="0dp" />
 
     <TextView
-        android:layout_width="50dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="0"
+        android:text="99999"
         android:id="@+id/fansRoomNumberOfFans"
         android:layout_row="0"
         android:layout_column="3"
-        android:layout_gravity="center_vertical"
         android:textStyle="bold"
         android:textColor="#fff"
         android:paddingLeft="10dp"
-        android:paddingRight="20dp" />
+        android:paddingRight="20dp"
+        android:gravity="right"
+        android:textSize="16dp" />
 
 
 

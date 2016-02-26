@@ -9,12 +9,14 @@ public class FansRoom implements Parcelable {
     private String matchId;
     private String name;
     private int numberOfFans;
+    private String teamFlagString;
 
-    public FansRoom(String id, String matchId, String name, int numberOfFans) {
+    public FansRoom(String id, String matchId, String name, int numberOfFans, String teamFlagString) {
         this.id = id;
         this.matchId = matchId;
         this.name = name;
         this.numberOfFans = numberOfFans;
+        this.teamFlagString = teamFlagString;
     }
 
     protected FansRoom(Parcel in) {
@@ -22,6 +24,7 @@ public class FansRoom implements Parcelable {
         matchId = in.readString();
         name = in.readString();
         numberOfFans = in.readInt();
+        teamFlagString = in.readString();
     }
 
     public static final Creator<FansRoom> CREATOR = new Creator<FansRoom>() {
@@ -68,6 +71,14 @@ public class FansRoom implements Parcelable {
         this.numberOfFans = numberOfFans;
     }
 
+    public String getTeamFlagString() {
+        return teamFlagString;
+    }
+
+    public void setTeamFlagString(String teamFlagString) {
+        this.teamFlagString = teamFlagString;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -79,5 +90,6 @@ public class FansRoom implements Parcelable {
         dest.writeString(matchId);
         dest.writeString(name);
         dest.writeInt(numberOfFans);
+        dest.writeString(teamFlagString);
     }
 }
