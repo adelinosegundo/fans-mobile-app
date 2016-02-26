@@ -55,7 +55,7 @@ public class MatchDetailActivity extends AppCompatActivity
 
     private void getFansRooms(){
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url ="http://192.168.25.20:3000/matches/"+matchId;
+        String url ="http://fans-chat-server.herokuapp.com/matches/"+matchId;
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override
@@ -96,6 +96,8 @@ public class MatchDetailActivity extends AppCompatActivity
         this.matchId = getIntent().getExtras().getString("match_id");
 
         getFansRooms();
+
+
 
 //        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 //        setSupportActionBar(toolbar);

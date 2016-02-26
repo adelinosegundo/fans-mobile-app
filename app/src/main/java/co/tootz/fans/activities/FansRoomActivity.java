@@ -31,8 +31,6 @@ import java.net.URISyntaxException;
 import java.util.Objects;
 
 import co.tootz.fans.R;
-import co.tootz.fans.fragments.FansRoomBattleCryFragment;
-import co.tootz.fans.fragments.FansRoomChatFragment;
 import co.tootz.fans.domain.User;
 import io.socket.client.IO;
 import io.socket.client.Socket;
@@ -136,7 +134,7 @@ public class FansRoomActivity extends AppCompatActivity {
 
     private void setupSocket(){
         try {
-            mSocket = IO.socket("http://192.168.25.20:3000/");
+            mSocket = IO.socket("http://fans-chat-server.herokuapp.com/");
 
             mSocket.connect();
             mSocket.on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
@@ -300,7 +298,7 @@ public class FansRoomActivity extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.chat_fragment, container, false);
+            View rootView = inflater.inflate(R.layout.fragment_fans_room, container, false);
             TextView textView = (TextView) rootView.findViewById(R.id.section_label);
             textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
             return rootView;
@@ -321,31 +319,26 @@ public class FansRoomActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-
-            switch (position) {
-                case 0: return FansRoomChatFragment.newInstance("Chat, 1");
-                case 1: return FansRoomBattleCryFragment.newInstance("Gritos de Guerra, 1");
-                default: return FansRoomChatFragment.newInstance("Chat, 1");
-            }
+            return PlaceholderFragment.newInstance(position + 1);
         }
 
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 2;
+            return 3;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "CHAT";
+                    return "SECTION 1";
                 case 1:
-                    return "GRITOS DE GUERRA";
-                default:
-                    return "CHAT";
+                    return "SECTION 2";
+                case 2:
+                    return "SECTION 3";
             }
-//            return null;
+            return null;
         }
     }
 }
