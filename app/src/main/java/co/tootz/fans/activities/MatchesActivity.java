@@ -57,7 +57,7 @@ public class MatchesActivity extends AppCompatActivity
 
     private void getMatches(){
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url ="http://192.168.25.20:3000/matches";
+        String url ="http://fans-chat-server.herokuapp.com/matches";
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override
