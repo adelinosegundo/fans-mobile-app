@@ -19,6 +19,19 @@
         android:layout_marginBottom="8dp"
         android:visibility="gone" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="LOGIN"
+        android:layout_gravity="center_horizontal"
+        android:typeface="serif"
+        android:textSize="20dp"
+        android:textColor="#fff"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="20dp"
+        android:textStyle="bold" />
+
     <ScrollView
         android:id="@+id/login_form"
         android:layout_width="match_parent"
