@@ -15,7 +15,9 @@
         android:id="@+id/chat_text_view"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/num_user_text_view"
-        android:layout_above="@+id/chat_edit_text" />
+        android:layout_above="@+id/chat_edit_text"
+        android:typeface="serif"
+        android:textColor="#fff" />
 
     <Button
         android:layout_width="fill_parent"
@@ -30,10 +32,14 @@
         android:layout_width="385dp"
         android:layout_height="55dp"
         android:layout_gravity="center"
-        android:hint="TYPE IN YOUR MESSAGE"
         android:id="@+id/chat_edit_text"
         android:layout_above="@+id/send_button"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:typeface="serif"
+        android:textColorHint="#fff"
+        android:textColorLink="#fff"
+        android:textColorHighlight="#fff"
+        android:textColor="#fff" />
 
     <TextView
         android:layout_width="wrap_content"
