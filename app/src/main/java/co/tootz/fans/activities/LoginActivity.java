@@ -218,7 +218,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
 
             RequestQueue queue = Volley.newRequestQueue(this);
-            String url ="http://192.168.25.20:3000/users/login";
+            String url ="http://fans-chat-server.herokuapp.com/users/login";
             StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                     new Response.Listener<String>() {
                         @Override
