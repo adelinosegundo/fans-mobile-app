@@ -70,7 +70,7 @@ public class MatchDetailActivity extends AppCompatActivity
                                 String name = fansRoomJSON.getString("name");
                                 int numberOfFans = fansRoomJSON.getInt("number_of_fans");
 
-                                fansRooms.add(new FansRoom(id, matchId, name, numberOfFans));
+                                fansRooms.add(new FansRoom(id, matchId, name, numberOfFans, ""));
                             }
                             engineFansRoomsList(fansRooms);
                         } catch (JSONException e) {

@@ -1,5 +1,6 @@
 package co.tootz.fans.activities;
 
+import android.content.Context;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -11,18 +12,38 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.net.URISyntaxException;
+import java.util.Objects;
+
 import co.tootz.fans.R;
+import co.tootz.fans.domain.User;
+import io.socket.client.IO;
+import io.socket.client.Socket;
+import io.socket.emitter.Emitter;
 
 public class FansRoomActivity extends AppCompatActivity {
 
+    private Socket mSocket;
+    private Context context;
+    private EditText mInputMessage;
+    private Button mSendButton;
+    private TextView mTextView;
+    private TextView mNumberUsersTextView;
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -65,8 +86,167 @@ public class FansRoomActivity extends AppCompatActivity {
             }
         });
 
+        context = this;
+
+        mInputMessage = (EditText) findViewById(R.id.chat_edit_text);
+        mSendButton = (Button) findViewById(R.id.send_button);
+        mTextView = (TextView) findViewById(R.id.chat_text_view);
+        mNumberUsersTextView = (TextView) findViewById(R.id.num_user_text_view);
+
+        setupSocket();
     }
 
+    private void setDisconnected(){
+        this.finish();
+    }
+
+    private void setNumberUsers(JSONObject obj){
+        try {
+            mNumberUsersTextView.setText(obj.getString("numUsers") + " users connected.");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void userMessage(JSONObject obj){
+        try {
+            String username = obj.getString("username");
+            String message = obj.getString("message");
+            mTextView.append("\n" + username + ": " + message);
+        }catch (Exception e){
+            Log.e("userMessage", e.getMessage());
+        }
+    }
+
+    private void infoMessage(JSONObject obj, boolean joining){
+        try {
+            String username = obj.getString("username");
+            String numUsers = obj.getString("numUsers");
+            if (joining)
+                mTextView.append("\n" +username + " just joined");
+            else
+                mTextView.append("\n" +username + " just left");
+            setNumberUsers(obj);
+        }catch (Exception e){
+            Log.e("infoMessage", e.getMessage());
+        }
+    }
+
+    private void setupSocket(){
+        try {
+            mSocket = IO.socket("http://192.168.25.20:3000/");
+
+            mSocket.connect();
+            mSocket.on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            setDisconnected();
+                        }
+                    });
+                }
+            });
+
+            mSocket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
+                @Override
+                public void call(Object... args){
+                    mSocket.emit("authenticate", User.getTokeen(context));
+                }
+            });
+
+            mSocket.on("authenticated", new Emitter.Listener(){
+                @Override
+                public void call(Object... args) {
+                    mSendButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            attemptSend();
+                        }
+                    });
+                    mSocket.emit("add user", "android user");
+                }
+            });
+
+            mSocket.on("login", new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    final JSONObject obj = (JSONObject) args[0];
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            setNumberUsers(obj);
+                        }
+                    });
+                }
+            });
+
+            mSocket.on("user joined", new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    final JSONObject obj = (JSONObject) args[0];
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            infoMessage(obj, true);
+                        }
+                    });
+                }
+            });
+
+            mSocket.on("user left", new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    final JSONObject obj = (JSONObject) args[0];
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            infoMessage(obj, false);
+                        }
+                    });
+                }
+            });
+
+            mSocket.on("new message", new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    final JSONObject obj = (JSONObject) args[0];
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            userMessage(obj);
+                        }
+                    });
+                }
+            });
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void attemptSend() {
+        final String message = mInputMessage.getText().toString().trim();
+        if (TextUtils.isEmpty(message)) {
+            return;
+        }
+        mInputMessage.setText("");
+
+        final JSONObject obj = new JSONObject();
+        try {
+            obj.put("username", "android user");
+            obj.put("message", message);
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    userMessage(obj);
+                }
+            });
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        mSocket.emit("new message", message);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
