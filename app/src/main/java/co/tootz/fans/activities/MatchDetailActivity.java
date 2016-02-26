@@ -10,15 +10,32 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import co.tootz.fans.R;
 import co.tootz.fans.adapters.FansRoomAdapter;
 import co.tootz.fans.application.FansApplication;
+import co.tootz.fans.domain.FansRoom;
+import co.tootz.fans.domain.Match;
 
 public class MatchDetailActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -26,13 +43,49 @@ public class MatchDetailActivity extends AppCompatActivity
     private SharedPreferences sharedPreferences;
     private ListView fans_roomsList;
     private FansRoomAdapter fansRoomAdapter;
+    private String matchId;
 
 
-    private void engineFansRoomsList() {
+    private void engineFansRoomsList(List<FansRoom> fansRooms) {
         fans_roomsList = (ListView) findViewById(R.id.fans_rooms_list);
-        fansRoomAdapter = new FansRoomAdapter(this, R.layout.activity_match_detail);
+        fansRoomAdapter = new FansRoomAdapter(this, R.layout.activity_match_detail, fansRooms);
         fans_roomsList.setAdapter(fansRoomAdapter);
         fansRoomAdapter.update();
+    }
+
+    private void getFansRooms(){
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String url ="http://192.168.25.20:3000/matches/"+matchId;
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("RESPONSE", "Response is: " + response);
+                        List<FansRoom> fansRooms = new ArrayList<FansRoom>();
+                        try {
+                            JSONArray fansRoomsJSON = new JSONArray(response);
+                            for (int i = 0; i < fansRoomsJSON.length(); i++){
+                                JSONObject fansRoomJSON = fansRoomsJSON.getJSONObject(i);
+                                String id = fansRoomJSON.getString("_id");
+                                String name = fansRoomJSON.getString("name");
+                                int numberOfFans = fansRoomJSON.getInt("number_of_fans");
+
+                                fansRooms.add(new FansRoom(id, matchId, name, numberOfFans));
+                            }
+                            engineFansRoomsList(fansRooms);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("ERROR", "That didn't work!");
+                    }
+                }
+        );
+        queue.add(stringRequest);
     }
 
     @Override
@@ -40,9 +93,10 @@ public class MatchDetailActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_match_detail);
 
-        String match_id = getIntent().getExtras().getString("match_id");
+        this.matchId = getIntent().getExtras().getString("match_id");
 
-        engineFansRoomsList();
+        getFansRooms();
+
 
 
 //        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

@@ -19,26 +19,16 @@ import co.tootz.fans.domain.Match;
 
 public class MatchAdapter extends ArrayAdapter<Match> {
     private Context context;
-
-    public MatchAdapter(Context context, int id) {
+    private List<Match> matchesList;
+    public MatchAdapter(Context context, int id, List<Match> matchesList) {
         super(context, id);
         this.context = context;
+        this.matchesList = matchesList;
         this.update();
     }
 
     public void update() {
         this.clear();
-
-        List<Match> matchesList = new ArrayList<>();
-        matchesList.add(new Match("1", "Brasil", "1", "", "", "Alemanha", "7", "", ""));
-        matchesList.add(new Match("2", "Croácia", "4", "", "", "Japão", "3", "", ""));
-        matchesList.add(new Match("3", "Brasil", "1", "", "", "Alemanha", "7", "", ""));
-        matchesList.add(new Match("4", "Croácia", "4", "", "", "Japão", "3", "", ""));
-        matchesList.add(new Match("5", "Brasil", "1", "", "", "Alemanha", "7", "", ""));
-        matchesList.add(new Match("6", "Croácia", "4", "", "", "Japão", "3", "", ""));
-        matchesList.add(new Match("7", "Brasil", "1", "", "", "Alemanha", "7", "", ""));
-        matchesList.add(new Match("8", "Croácia", "4", "", "", "Japão", "3", "", ""));
-
         this.addAll(matchesList);
         this.notifyDataSetChanged();
     }
