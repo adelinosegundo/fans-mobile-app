@@ -15,27 +15,19 @@ import co.tootz.fans.domain.FansRoom;
 
 public class FansRoomAdapter extends ArrayAdapter<FansRoom> {
     private Context context;
+    private List<FansRoom> fansRooms;
 
-    public FansRoomAdapter(Context context, int id) {
+    public FansRoomAdapter(Context context, int id, List<FansRoom> fansRooms) {
         super(context, id);
         this.context = context;
+        this.fansRooms = fansRooms;
         this.update();
     }
 
     public void update() {
         this.clear();
 
-        List<FansRoom> fansRoomsList = new ArrayList<>();
-        fansRoomsList.add(new FansRoom("1", "1", "Fans Room 1", 12));
-        fansRoomsList.add(new FansRoom("5", "1", "Fans Room 2", 134));
-        fansRoomsList.add(new FansRoom("3", "1", "Fans Room 3", 54));
-        fansRoomsList.add(new FansRoom("7", "1", "Fans Room 4", 95));
-        fansRoomsList.add(new FansRoom("2", "2", "Fans Room 1", 10));
-        fansRoomsList.add(new FansRoom("4", "2", "Fans Room 2", 33));
-        fansRoomsList.add(new FansRoom("6", "2", "Fans Room 3", 4));
-        fansRoomsList.add(new FansRoom("8", "2", "Fans Room 4", 2));
-
-        this.addAll(fansRoomsList);
+        this.addAll(fansRooms);
         this.notifyDataSetChanged();
     }
 

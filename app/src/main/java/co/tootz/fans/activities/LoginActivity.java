@@ -20,17 +20,33 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import co.tootz.fans.R;
 import co.tootz.fans.application.FansApplication;
+import co.tootz.fans.domain.User;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -67,16 +83,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        this.context = getApplicationContext();
-        this.sharedPreferences = getSharedPreferences(FansApplication.SHARED_PREFERENCES, MODE_PRIVATE);
-
-
-        String name = sharedPreferences.getString("username", "");
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-
+        this.context = getApplicationContext();
+        this.sharedPreferences = getSharedPreferences(FansApplication.SHARED_PREFERENCES, MODE_PRIVATE);
+        String name = sharedPreferences.getString("username", "");
 
         // Set up the login form.
         mloginNameTextView = (AutoCompleteTextView) findViewById(R.id.loginNameTextView);
@@ -105,11 +117,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
 
-        if (!name.equals("")) {
-            showProgress(true);
-            mAuthTask = new UserLoginTask(name);
-            mAuthTask.execute((Void) null);
-        }
+//        if (!name.equals("")) {
+//            showProgress(true);
+//            mAuthTask = new UserLoginTask(name);
+//            mAuthTask.execute((Void) null);
+//        }
     }
 
     private void populateAutoComplete() {
@@ -171,7 +183,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 //        mPasswordView.setError(null);
 
         // Store values at the time of the login attempt.
-        String name = mloginNameTextView.getText().toString();
+        final String name = mloginNameTextView.getText().toString();
 //        String password = mPasswordView.getText().toString();
 
         boolean cancel = false;
@@ -202,15 +214,43 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
-            showProgress(true);
+//            showProgress(true);
 
-            sharedPreferencesEditor = sharedPreferences.edit();
-            sharedPreferencesEditor.putString("username", name);
-            sharedPreferencesEditor.commit();
 
-//            mAuthTask = new UserLoginTask(email, password);
-            mAuthTask = new UserLoginTask(name);
-            mAuthTask.execute((Void) null);
+            RequestQueue queue = Volley.newRequestQueue(this);
+            String url ="http://192.168.25.20:3000/users/login";
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            Log.d("RESPONSE", "Response is: " + response);
+                            try {
+                                User.setTokeen(context, new JSONObject(response).getString("token"));
+                                User.setUsername(context, name);
+                                Intent matchesActivityIntent = new Intent(context, MatchesActivity.class);
+                                startActivity(matchesActivityIntent);
+                            } catch (JSONException e){
+                                Log.e("ERROR", e.getMessage());
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Log.e("ERROR", "That didn't work!");
+                        }
+                    }
+            ){
+                @Override
+                protected Map<String,String> getParams() {
+                    // something to do here ??
+                    Map<String,String> params = new HashMap<String, String>();
+                    params.put("username", name);
+                    return params;
+                }
+
+            };
+            queue.add(stringRequest);
         }
     }
 
@@ -337,20 +377,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // TODO: attempt authentication against a network service.
 
             try {
-                // Simulate network access.
+
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
                 return false;
             }
-
-//            for (String credential : DUMMY_CREDENTIALS) {
-//                String[] pieces = credential.split(":");
-//                if (pieces[0].equals(mEmail)) {
-//                    // Account exists, return true if the password matches.
-//                    return pieces[1].equals(mPassword);
-//                }
-//            }
-
             // TODO: register the new account here.
             return true;
         }
