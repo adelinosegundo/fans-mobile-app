@@ -1,6 +1,7 @@
 package co.tootz.fans.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import co.tootz.fans.R;
+import co.tootz.fans.activities.FansRoomActivity;
 import co.tootz.fans.domain.FansRoom;
 
 public class FansRoomAdapter extends ArrayAdapter<FansRoom> {
@@ -48,16 +50,16 @@ public class FansRoomAdapter extends ArrayAdapter<FansRoom> {
             view.setTag(holder);
 
 
-//            view.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    String fansRoom_id = fansRoom.getId();
-//                    Intent intent = new Intent(context, FansRoomDetailActivity.class);
-//                    intent.putExtra("fansRoom_id", fansRoom_id);
-//
-//                    context.startActivity(intent);
-//                }
-//            });
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String fansRoom_id = fansRoom.getId();
+                    Intent intent = new Intent(context, FansRoomActivity.class);
+                    intent.putExtra("fansRoom_id", fansRoom_id);
+
+                    context.startActivity(intent);
+                }
+            });
         } else {
             holder = (ViewHolder) view.getTag();
         }
