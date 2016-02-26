@@ -12,18 +12,191 @@
         android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/appbar_padding_top"
         android:theme="@style/AppTheme.AppBarOverlay">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:layout_scrollFlags="scroll|enterAlways"
-            app:popupTheme="@style/AppTheme.PopupOverlay">
+        <GridLayout
+            android:layout_gravity="fill_horizontal"
+            android:layout_height="wrap_content"
+            android:horizontalSpacing="5dp"
+            android:columnCount="7"
+            android:rowCount="2"
+            android:orientation="horizontal"
+            android:descendantFocusability="blocksDescendants"
+            android:layout_width="fill_parent"
+            android:background="#000000"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:id="@+id/gridLayout">
 
-        </android.support.v7.widget.Toolbar>
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="23dp"
+                android:layout_row="0"
+                android:layout_column="0"
+                android:cropToPadding="false"
+                android:scaleType="centerCrop"
+                android:src="@drawable/icon_fans"
+                android:layout_marginRight="9dp"
+                android:layout_marginLeft="9dp"
+                android:layout_marginTop="7dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="99999"
+                android:id="@+id/matchDetailFirstTeamFans"
+                android:layout_row="1"
+                android:layout_column="0"
+                android:textColor="#fff"
+                android:textSize="8dp"
+                android:gravity="center_horizontal"
+                android:layout_gravity="fill_horizontal|center_horizontal" />
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:id="@+id/matchDetailFirstTeamFlag"
+                android:layout_row="0"
+                android:layout_column="1"
+                android:layout_rowSpan="2"
+                android:background="#1f3018"
+                android:cropToPadding="false"
+                android:scaleType="centerCrop"
+                android:src="@drawable/flag1"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:padding="1dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="0"
+                android:id="@+id/matchDetailFirstTeamScore"
+                android:layout_row="0"
+                android:layout_column="2"
+                android:layout_rowSpan="2"
+                android:layout_gravity="center_vertical"
+                android:textStyle="bold"
+                android:textColor="#fff"
+                android:paddingLeft="10dp"
+                android:paddingRight="20dp" />
+
+            <RelativeLayout
+                android:orientation="horizontal"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_row="0"
+                android:layout_column="3"
+                android:layout_rowSpan="2"
+                android:gravity="center"
+                android:layout_gravity="fill_horizontal">
+
+                <TextView
+                    android:layout_height="25dp"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="2º"
+                    android:id="@+id/matchRowMatchHalfTime"
+                    android:width="30dp"
+                    android:background="#1b1b1b"
+                    android:layout_width="30dp"
+                    android:textStyle="bold"
+                    android:textAlignment="center"
+                    android:textColor="#fff"
+                    android:textSize="12dp"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_toStartOf="@+id/matchRowMatchTime"
+                    android:gravity="center_horizontal" />
+
+                <TextView
+                    android:layout_height="25dp"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="23:30"
+                    android:id="@+id/matchRowMatchTime"
+                    android:width="30dp"
+                    android:background="#1f3018"
+                    android:layout_width="50dp"
+                    android:textStyle="bold"
+                    android:textAlignment="center"
+                    android:textColor="#fff"
+                    android:textSize="12dp"
+                    android:gravity="center|center_horizontal"
+                    android:layout_alignTop="@+id/matchRowMatchHalfTime"
+                    android:layout_alignParentEnd="true"
+                    android:autoText="false" />
+
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="0"
+                android:id="@+id/matchDetailSecondTeamScore"
+                android:layout_row="0"
+                android:layout_column="4"
+                android:layout_rowSpan="2"
+                android:layout_gravity="center_vertical"
+                android:textStyle="bold"
+                android:textColor="#fff"
+                android:paddingLeft="20dp"
+                android:paddingRight="10dp" />
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:id="@+id/matchDetailSecondTeamFlag"
+                android:layout_row="0"
+                android:layout_column="5"
+                android:layout_rowSpan="2"
+                android:background="#1f3018"
+                android:cropToPadding="false"
+                android:scaleType="centerCrop"
+                android:src="@drawable/flag2"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:padding="1dp" />
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="23dp"
+                android:layout_row="0"
+                android:layout_column="6"
+                android:cropToPadding="false"
+                android:scaleType="centerCrop"
+                android:src="@drawable/icon_fans"
+                android:layout_marginRight="9dp"
+                android:layout_marginLeft="9dp"
+                android:layout_marginTop="7dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="99999"
+                android:id="@+id/matchDetailSecondTeamFans"
+                android:layout_row="1"
+                android:layout_column="6"
+                android:textColor="#fff"
+                android:textSize="8dp"
+                android:gravity="center_horizontal"
+                android:layout_gravity="fill_horizontal|center_horizontal" />
+
+
+        </GridLayout>
+
+        <!--<android.support.v7.widget.Toolbar-->
+            <!--android:id="@+id/toolbar"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="?attr/actionBarSize"-->
+            <!--android:background="?attr/colorPrimary"-->
+            <!--app:layout_scrollFlags="scroll|enterAlways"-->
+            <!--app:popupTheme="@style/AppTheme.PopupOverlay">-->
+
+        <!--</android.support.v7.widget.Toolbar>-->
 
         <android.support.design.widget.TabLayout
             android:id="@+id/tabs"
